@@ -36,4 +36,4 @@ const useEventListener = (
 
 export const useEmitter = () => useRef(emitter).current
 
-export default useEventListener
+export { useEventListener as default, useEventListener }
