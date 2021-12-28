@@ -37,7 +37,7 @@ const App = () => {
 const Basic = () => {
   const [text, setText] = useState('')
 
-  const emmitter = useEventListener(
+  const emitter = useEventListener(
     {
       listeners: {
         setText: (text) => {
@@ -60,7 +60,7 @@ const Basic = () => {
           😄
         </span>
         <Renderer text={text} />
-        <Typer text={text} emmitter={emmitter} />
+        <Typer text={text} emitter={emitter} />
       </div>
     </div>
   )
@@ -86,10 +86,10 @@ const Toggle = ({ setShow }) => {
 
 const Renderer = ({ text }) => <div>Text input: {text}</div>
 
-const Typer = ({ emmitter, text }) => (
+const Typer = ({ emitter, text }) => (
   <input
     value={text}
-    onChange={({ target: { value } }) => emmitter.emit('setText', value)}
+    onChange={({ target: { value } }) => emitter.emit('setText', value)}
   />
 )
 
