@@ -1,11 +1,25 @@
-import { useRef, useLayoutEffect } from 'react'
+import { useRef, useLayoutEffect, DependencyList } from 'react'
 import EventEmitter from 'events'
 
 export const emitter = new EventEmitter()
 
+export type UseListenersCallback = (...payloads: any) => any
+
+export interface UseListenersCallbacks {
+  [key: string]: UseListenersCallback
+}
+
+type AnyObject<T = any> = { [key: string]: T }
+
+export interface UseListenersOptions {
+  listeners?: UseListenersCallbacks
+  removeListeners?: UseListenersCallbacks
+  params?: AnyObject
+}
+
 const useEventListener = (
-  { listeners = {}, removeListeners = {}, params = {} },
-  deps = []
+  { listeners = {}, removeListeners = {}, params = {} }: UseListenersOptions,
+  deps: DependencyList = []
 ) => {
   useLayoutEffect(() => {
     const names = Object.keys(listeners)
@@ -14,7 +28,7 @@ const useEventListener = (
       const callbacks = {}
 
       names.map((name) => {
-        const callback = (...payloads) => {
+        const callback = (...payloads: any) => {
           const listener = listeners[name]
           return listener && listener(...payloads, params)
         }
@@ -29,6 +43,7 @@ const useEventListener = (
           removeListeners[name] && removeListeners[name]()
         })
     }
+    return () => {}
   }, deps)
 
   return emitter
